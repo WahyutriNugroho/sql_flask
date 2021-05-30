@@ -1,4 +1,4 @@
-#db.py
+# db.py
 import os
 import pymysql
 from flask import jsonify
@@ -14,30 +14,32 @@ def open_connection():
     try:
         if os.environ.get('GAE_ENV') == 'standard':
             conn = pymysql.connect(user=db_user, password=db_password,
-                                unix_socket=unix_socket, db=db_name,
-                                cursorclass=pymysql.cursors.DictCursor
-                                )
+                                   unix_socket=unix_socket, db=db_name,
+                                   cursorclass=pymysql.cursors.DictCursor
+                                   )
     except pymysql.MySQLError as e:
         print(e)
 
     return conn
 
 
-def get_predicts():
+def get_datas():
     conn = open_connection()
     with conn.cursor() as cursor:
-        result = cursor.execute('SELECT * FROM prediction;')
-        predicts = cursor.fetchall()
+        result = cursor.execute('SELECT * FROM dt;')
+        data = cursor.fetchall()
         if result > 0:
-            got_predicts = jsonify(predicts)
+            got_datas = jsonify(data)
         else:
-            got_predicts = 'No Image in DB'
+            got_datas = 'No Image in DB'
     conn.close()
-    return got_predicts
+    return got_datas
 
-def add_predict(predict):
+
+def add_data(data):
     conn = open_connection()
     with conn.cursor() as cursor:
-        cursor.execute('INSERT INTO prediction (image, latitude, longtitude, kelas, probabilitas) VALUES(%s, %s, %s, %s, %s)', (predict["image"], predict["latitude"], predict["longtitude"], predict["kelas"], predict["probabilitas"]))
+        cursor.execute('INSERT INTO dt (name, gender, address, age) VALUES(%s, %s, %s, %s)',
+                       (data["name"], data["gender"], data["address"], data["age"]))
     conn.commit()
     conn.close()
