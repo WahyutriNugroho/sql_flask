@@ -1,0 +1,8 @@
+#app.yaml
+runtime: python37
+
+env_variables:
+  CLOUD_SQL_USERNAME: prediction
+  CLOUD_SQL_PASSWORD: prediction
+  CLOUD_SQL_DATABASE_NAME: prediction
+  CLOUD_SQL_CONNECTION_NAME: ninth-psyche-315103:asia-southeast2:prediction
